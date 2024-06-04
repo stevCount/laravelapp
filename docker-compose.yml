@@ -1,0 +1,60 @@
+version: "3.7"
+services:
+  app:
+    build:
+      args:
+        user: jhons
+        uid: 1000
+      context: ./
+      dockerfile: Dockerfile
+    ## remplazar nombre
+    image: laravelimage
+    ## nombre de contenedor
+    container_name: laravelcontainer
+    restart: unless-stopped
+    working_dir: /var/www/
+    volumes:
+      - ./:/var/www
+    networks:
+      - laravelapp
+  #Contenedor para posgtres version 13 estable
+  db:
+    image: postgres:13
+    ## nombre contenedor para base de datos
+    container_name: postgres-db
+    restart: always
+    ## habilitar puerto 6543 para conexiones externas opcional 5432:5432 o se puede dejar sin opcion puertos(ports)
+    ports:
+      - 6543:5432
+    environment:
+      POSTGRES_DB: app_laravel
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - db_data:/var/lib/postgresql/
+      # opcional agregar archivo para scripts en bd, permisos y demas.
+      - ./docker-compose/postgresql/db.sql:/docker-entrypoint-initdb.d/db.sql
+    networks:
+      - laravelapp
+  # Contenedor para servidor para aplicacion
+  nginx:
+    image: nginx:alpine
+    # nombre contenedor servidor
+    container_name: nginx-laravel-container
+    restart: unless-stopped
+    # puerto donde se ejecutara la aplicacion de laravel
+    ports:
+      - 8000:80
+    volumes:
+      - ./:/var/www
+      # ubicacion para configuracion de servidor nginx
+      - ./docker-compose/nginx:/etc/nginx/conf.d/
+    networks:
+      - laravelapp
+networks:
+  laravelapp:
+    driver: bridge
+volumes:
+  db:
+    driver: local
+  db_data:

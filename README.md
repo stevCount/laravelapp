@@ -1,3 +1,21 @@
+## Scripts a ejecutar para creacion de aplicacion con Docker, Laravel, Postgres
+
+## Crear Build y imagenes para aplicacion laravel
+- docker-compose build app
+
+## Crear contenedores para aplicacion, postgres, nginx, app de laravel
+- docker-compose up -d
+
+## Scripts para migraciones en base de datos y configuracion de proyecto
+
+## Crear tablas y migraciones
+- docker exec -it laravelcontainer php artisan migrate
+## Generar llave para Api's y mas consultas
+- docker exec -it laravelcontainer php artisan key:generate
+## Comando para optimizacion todo en uno, events, views, cache, route, config, compiled
+- docker exec -it laravelcontainer php artisan optimize:clear
+
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
 
 <p align="center">

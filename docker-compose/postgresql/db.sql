@@ -1,0 +1,1 @@
+GRANT CONNECT ON DATABASE app_laravel TO postgres;
